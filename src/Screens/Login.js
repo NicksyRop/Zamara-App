@@ -10,6 +10,7 @@ import {
 import { Input, Box, Button } from "native-base";
 import ButtonComponent from "../Components/ButtonComponent";
 import { NavigationContainer } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Login({ navigation }) {
   const [username, setUsername] = useState();
@@ -25,9 +26,12 @@ function Login({ navigation }) {
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem("id", value);
+      await AsyncStorage.setItem("id", value.toString());
+      console.log(value);
     } catch (e) {
       // saving error
+
+      console.log("failed to save id");
     }
   };
   const Login = () => {
@@ -37,8 +41,8 @@ function Login({ navigation }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: username,
-        password: password,
+        username: "atuny0",
+        password: "9uQFF1Lh",
         // expiresInMins: 60, // optional
       }),
     })
@@ -50,13 +54,19 @@ function Login({ navigation }) {
           console.log("Logged in");
           storeData(result.id);
           // redirect to dashboard
-          navigation.navigate("Welcome");
+          navigation.navigate("Dashboard");
         }
       });
   };
 
   return (
-    <View sytle={{ marginTop: StatusBar.currentHeight }}>
+    <View
+      style={{
+        marginTop: StatusBar.currentHeight,
+        backgroundColor: "#002851",
+        height: Dimensions.get("window").height,
+      }}
+    >
       <View style={styles.top}>
         <Image
           source={require("../images/zamara.png")}
@@ -136,6 +146,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height / 4,
     alignContent: "center",
     alignItems: "center",
+    marginTop: Dimensions.get("window").height / 6,
   },
   bottom: {
     backgroundColor: "#fff",
