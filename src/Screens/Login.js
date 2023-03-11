@@ -1,12 +1,62 @@
-import React from "react";
-import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  StatusBar,
+} from "react-native";
 import { Input, Box, Button } from "native-base";
-import InputField from "../Components/InputField";
 import ButtonComponent from "../Components/ButtonComponent";
+import { NavigationContainer } from "@react-navigation/native";
 
-function Login() {
+function Login({ navigation }) {
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+
+  const onUsernameChange = (text) => {
+    setUsername(text);
+  };
+
+  const onPasswordChange = (text) => {
+    setPassword(text);
+  };
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem("id", value);
+    } catch (e) {
+      // saving error
+    }
+  };
+  const Login = () => {
+    console.log("login function");
+
+    fetch("https://dummyjson.com/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        // expiresInMins: 60, // optional
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.id == null) {
+          //store id using asynch storage
+        } else {
+          console.log("Logged in");
+          storeData(result.id);
+          // redirect to dashboard
+          navigation.navigate("Welcome");
+        }
+      });
+  };
+
   return (
-    <View>
+    <View sytle={{ marginTop: StatusBar.currentHeight }}>
       <View style={styles.top}>
         <Image
           source={require("../images/zamara.png")}
@@ -17,17 +67,59 @@ function Login() {
       <View style={styles.bottom}>
         <View style={styles.bottomview}>
           <View style={{ marginBottom: 15, marginTop: 20 }}>
-            <InputField placeholder="Enter username" />
+            <Input
+              shadow={2}
+              _light={{
+                bg: "coolGray.100",
+                _hover: {
+                  bg: "coolGray.200",
+                },
+                _focus: {
+                  bg: "coolGray.200:alpha.70",
+                },
+              }}
+              _dark={{
+                bg: "coolGray.800",
+                _hover: {
+                  bg: "coolGray.900",
+                },
+                _focus: {
+                  bg: "coolGray.900:alpha.70",
+                },
+              }}
+              placeholder="Enter Username"
+              onChangeText={(text) => onUsernameChange(text)}
+            />
           </View>
 
           <View style={{ marginBottom: 15 }}>
-            <InputField placeholder="Enter Password" />
+            <Input
+              shadow={2}
+              _light={{
+                bg: "coolGray.100",
+                _hover: {
+                  bg: "coolGray.200",
+                },
+                _focus: {
+                  bg: "coolGray.200:alpha.70",
+                },
+              }}
+              _dark={{
+                bg: "coolGray.800",
+                _hover: {
+                  bg: "coolGray.900",
+                },
+                _focus: {
+                  bg: "coolGray.900:alpha.70",
+                },
+              }}
+              placeholder="Enter Password"
+              onChangeText={(text) => onPasswordChange(text)}
+            />
           </View>
           <View style={{ marginBottom: 15 }}>
-          <ButtonComponent text="Login" />
+            <ButtonComponent text="Login" onClick={Login} />
           </View>
-
-         
         </View>
       </View>
     </View>
