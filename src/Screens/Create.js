@@ -37,7 +37,37 @@ export const Create = () => {
   console.log(salary);
   console.log(number);
 
-  const CreateStaff = () => {};
+  const CreateStaff = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      snumber: "HSHHS",
+      sname: "nickson",
+      semail: "nicksonkipkorir25@gmail.com",
+      sdepartment: "Tech",
+      ssalary: 20000,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      "https://crudcrud.com/api/9646572eccdf4c6eba38801c25044175/zamara",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        if (result) {
+          console.log(result);
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
   return (
     <View style={styles.parent}>
       <View style={styles.field}>
