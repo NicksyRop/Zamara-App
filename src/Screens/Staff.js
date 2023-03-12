@@ -11,6 +11,33 @@ import ButtonComponent from "../Components/ButtonComponent";
 
 const Staff = ({ navigation }) => {
   const [staff, setStaff] = useState([]);
+
+  useEffect(() => {
+    fetchStaff();
+  }, []);
+
+  const fetchStaff = () => {
+    var raw = "";
+
+    var requestOptions = {
+      method: "GET",
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      "https://crudcrud.com/api/9646572eccdf4c6eba38801c25044175/unicorns",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        if (result) {
+          setStaff(result);
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <View style={styles.default}>
       <View stye={styles.create}>
