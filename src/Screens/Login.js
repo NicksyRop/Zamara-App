@@ -41,8 +41,8 @@ function Login({ navigation }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: "atuny0",
-        password: "9uQFF1Lh",
+        username: "rshawe2",
+        password: "OWsTbMUgFc",
         // expiresInMins: 60, // optional
       }),
     })

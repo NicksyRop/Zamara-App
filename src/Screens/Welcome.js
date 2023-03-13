@@ -19,13 +19,16 @@ function Welcome() {
       const value = await AsyncStorage.getItem("id");
 
       if (value !== null) {
-        console.log(value);
-        setId(Number(value));
-        fethUser();
+        fetch("https://dummyjson.com/users/" + value)
+          .then((res) => res.json())
+          .then((result) => {
+            setUser((user) => {
+              console.log(user);
+              return result;
+            });
+          });
       }
     } catch (e) {
-      // error reading value
-
       console.log("no id was found");
     }
   };
@@ -35,19 +38,21 @@ function Welcome() {
     getData();
   }, []);
 
-  const fethUser = () => {
-    fetch("https://dummyjson.com/users/{userId}")
-      .then((res) => res.json())
-      .then((result) => {
-        setUser(result);
-      })
-      .then(() => {
-        console.log(user.lastName);
-      });
-  };
 
   return (
     <View style={styles.parent}>
+      <View>
+        <Text style={styles.text}>
+          {user ? (
+            <Image
+              source={{ uri: user.image }}
+              style={{ width: 60, height: 60 }}
+            />
+          ) : (
+            <Text> </Text>
+          )}{" "}
+        </Text>
+      </View>
       <View>
         <Text style={styles.text}>
           Welcome

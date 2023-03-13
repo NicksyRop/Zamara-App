@@ -9,8 +9,9 @@ import {
   StatusBar,
 } from "react-native";
 import ButtonComponent from "../Components/ButtonComponent";
+import RNSmtpMailer from "react-native-smtp-mailer";
 
-export const Create = () => {
+export const Create = ({ navigation }) => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [number, setNumber] = useState();
@@ -33,9 +34,6 @@ export const Create = () => {
   const onSalarychange = (value) => {
     setSalary(value);
   };
-
-  console.log(salary);
-  console.log(number);
 
   const CreateStaff = () => {
     var myHeaders = new Headers();
@@ -64,6 +62,27 @@ export const Create = () => {
       .then((result) => {
         if (result) {
           console.log(result);
+
+          navigation.navigate("List");
+          //send Email
+          RNSmtpMailer.sendMail({
+            mailhost: "smtp.smtpbucket.com",
+            port: 8025,
+            ssl: false,
+            username: "your_username",
+            password: "your_password",
+            from: "nicksonkipkorir25@gmailcom",
+            recipients: "kipkorirnickson45@gmail.com",
+            subject: "Profile Notification #Created",
+            htmlBody:
+              "<h1>Greeting {name}, we are glad to inform you that your staff profile has been created</h1>",
+          })
+            .then(() => {
+              console.log("Email sent successfully");
+            })
+            .catch((error) => {
+              console.error("Error sending email:", error);
+            });
         }
       })
       .catch((error) => console.log("error", error));
