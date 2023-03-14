@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 function Details() {
-  return <View>Welcome to details</View>;
+  return <View> </View>;
 }
 
 export default Details;

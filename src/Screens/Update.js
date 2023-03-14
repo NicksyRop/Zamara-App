@@ -1,21 +1,58 @@
 import { Input } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
+  Alert,
   Dimensions,
   StatusBar,
 } from "react-native";
 import ButtonComponent from "../Components/ButtonComponent";
 
-export const Update = () => {
+export const Update = ({ route, navigation }) => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [number, setNumber] = useState();
   const [department, setDepartment] = useState();
   const [salary, setSalary] = useState();
+  const { itemId, setItemId } = useState();
+
+  console.log("id is", route.params.user_id);
+
+  useEffect(() => {
+    const fetchuser = () => {
+      var raw = "";
+
+      var requestOptions = {
+        method: "GET",
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(
+        "https://crudcrud.com/api/6be8d16398434da1ad0e5e0adbb4d34b/zamara/" +
+          route.params.user_id,
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result !== null) {
+            setDepartment(result.sdepartment);
+            setEmail(result.semail);
+            setName(result.sname);
+            setSalary(result.ssalary);
+            setNumber(result.snumber);
+          }
+        })
+        .catch((error) =>
+          console.log("error", "The fetch did not work" + error)
+        );
+    };
+
+    fetchuser();
+  }, []);
 
   const onNamechange = (value) => {
     setName(value);
@@ -34,8 +71,6 @@ export const Update = () => {
     setSalary(value);
   };
 
-  console.log(salary);
-  console.log(number);
   const sendEmail = () => {
     var requestOptions = {
       method: "POST",
@@ -56,40 +91,97 @@ export const Update = () => {
       .catch((error) => console.log("error", error));
   };
 
-  const deleteUser = () => {};
+  const deleteUser = () => {
+    var requestOptions = {
+      method: "DELETE",
+      redirect: "follow",
+    };
 
-  const UpdateStaff = () => {};
+    fetch(
+      "https://crudcrud.com/api/6be8d16398434da1ad0e5e0adbb4d34b/zamara/" +
+        route.params.user_id,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        sendEmail();
+        navigation.navigate("List");
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const UpdateStaff = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      snumber: number,
+      sname: name,
+      semail: email,
+      sdepartment: department,
+      ssalary: salary,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      "https://crudcrud.com/api/6be8d16398434da1ad0e5e0adbb4d34b/zamara/" +
+        route.params.user_id,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        sendEmail();
+        console.log("successfully updated");
+
+        navigation.navigate("List");
+      })
+      .catch((error) => console.log("error", error));
+  };
   return (
     <View style={styles.parent}>
       <View style={styles.field}>
         <Text>Staff Number</Text>
 
-        <Input onChangeText={(value) => onNumberchange(value)} />
+        <Input value={number} onChangeText={(value) => onNumberchange(value)} />
       </View>
       <View style={styles.field}>
         <Text>Staff Name</Text>
 
-        <Input onChangeText={(value) => onNamechange(value)} />
+        <Input value={name} onChangeText={(value) => onNamechange(value)} />
       </View>
       <View style={styles.field}>
         <Text>Staff Email</Text>
 
-        <Input onChangeText={(value) => onEmailchange(value)} />
+        <Input value={email} onChangeText={(value) => onEmailchange(value)} />
       </View>
       <View style={styles.field}>
         <Text>Department </Text>
 
-        <Input onChangeText={(value) => onDepartmentchange(value)} />
+        <Input
+          value={department}
+          onChangeText={(value) => onDepartmentchange(value)}
+        />
       </View>
       <View style={styles.field}>
         <Text>Salary</Text>
 
-        <Input onChangeText={(value) => onSalarychange(value)} />
+        <Input value={salary} onChangeText={(value) => onSalarychange(value)} />
       </View>
 
       <View style={styles.btns}>
-        <ButtonComponent text="Update" onClick={UpdateStaff} />
-        <ButtonComponent text="Delete" onClick={deleteUser} />
+        <View style={{ marginRight: 10 }}>
+          <ButtonComponent text="Update" onClick={UpdateStaff} />
+        </View>
+
+        <View>
+          <ButtonComponent text="Delete" onClick={deleteUser} />
+        </View>
       </View>
     </View>
   );
@@ -108,5 +200,9 @@ const styles = StyleSheet.create({
   btns: {
     flexDirection: "row",
     justifyContent: "space-between",
+    width: Dimensions.get("window").width / 3,
+    alignItems: "center",
+    alignSelf: "center",
+    padding: 10,
   },
 });

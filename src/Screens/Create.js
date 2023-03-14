@@ -67,11 +67,11 @@ export const Create = ({ navigation }) => {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-      snumber: "HSHHS",
-      sname: "nickson",
-      semail: "nicksonkipkorir25@gmail.com",
-      sdepartment: "Tech",
-      ssalary: 20000,
+      snumber: number,
+      sname: name,
+      semail: email,
+      sdepartment: department,
+      ssalary: salary,
     });
 
     var requestOptions = {
@@ -82,7 +82,7 @@ export const Create = ({ navigation }) => {
     };
 
     fetch(
-      "https://crudcrud.com/api/9646572eccdf4c6eba38801c25044175/zamara",
+      "https://crudcrud.com/api/6be8d16398434da1ad0e5e0adbb4d34b/zamara",
       requestOptions
     )
       .then((response) => response.json())

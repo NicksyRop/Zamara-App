@@ -11,7 +11,7 @@ import {
 import ButtonComponent from "../Components/ButtonComponent";
 import StaffListItem from "../Components/StaffListItem";
 
-const Staff = ({ navigation }) => {
+const Staff = ({ route, navigation }) => {
   const [staff, setStaff] = useState([]);
 
   useEffect(() => {
@@ -28,21 +28,25 @@ const Staff = ({ navigation }) => {
     };
 
     fetch(
-      "https://crudcrud.com/api/9646572eccdf4c6eba38801c25044175/zamara",
+      "https://crudcrud.com/api/6be8d16398434da1ad0e5e0adbb4d34b/zamara",
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
         if (result !== null) {
           setStaff(result);
+
+          console.log(result);
         }
       })
       .catch((error) => console.log("error", error));
   };
 
-  const handleClick = (id) => {
-    //open details page for delete or update
-    navigation.navigate("Details");
+  const onClick = (id) => {
+    console.log(id);
+    navigation.navigate("Update", {
+      user_id: id,
+    });
   };
 
   const handleNavigate = () => {
@@ -82,12 +86,15 @@ const Staff = ({ navigation }) => {
               data={staff}
               renderItem={({ item }) => (
                 <StaffListItem
-                  {...item}
-                  key={item.ssalary}
-                  onClick={(id) => handleClick(item._id)}
+                  name={item.sname}
+                  salary={item.ssalary}
+                  department={item.sdepartment}
+                  number={item.snumber}
+                  email={item.semail}
+                  onClick={() => onClick(item._id)}
                 />
               )}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item._id}
             />
 
             <ButtonComponent text="Add Staff" onClick={handleNavigate} />

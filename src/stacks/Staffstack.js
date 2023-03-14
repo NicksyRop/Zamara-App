@@ -1,10 +1,11 @@
 import React from "react";
-import Staff from "../Screens/Staff";
 
 const Stack = createStackNavigator();
 import { createStackNavigator } from "@react-navigation/stack";
-import Details from "../Screens/Details";
+import Staff from "../Screens/Staff";
 import { Create } from "../Screens/Create";
+import Details from "../Screens/Details";
+import { Update } from "../Screens/Update";
 
 function Staffstack() {
   return (
@@ -23,6 +24,12 @@ function Staffstack() {
       <Stack.Screen
         name="Detail"
         component={Details}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="Update"
+        component={Update}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

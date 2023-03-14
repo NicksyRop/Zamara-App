@@ -8,41 +8,49 @@ import {
   Dimensions,
 } from "react-native";
 
-const StaffListItem = ({ item, onClick }) => {
+const StaffListItem = ({
+  onClick,
+  name,
+  salary,
+  department,
+  number,
+  email,
+}) => {
+  console.log(name);
   return (
     <View style={styles.table}>
       <View style={styles.row}></View>
-      <View style={styles.row}>
+      <TouchableOpacity style={styles.row} onPress={onClick}>
         <View style={styles.column}>
           <Text style={styles.text}>
-            {item ? <Text>{item.snumber}</Text> : <Text></Text>}
+            {number ? <Text>{number}</Text> : <Text></Text>}
           </Text>
         </View>
         <View style={styles.column}>
           <Text style={styles.text}>
             {" "}
-            {item ? <Text>{item.sname}</Text> : <Text></Text>}
+            {name ? <Text>{name}</Text> : <Text></Text>}
           </Text>
         </View>
         <View style={styles.column}>
           <Text style={styles.text}>
             {" "}
-            {item ? <Text>{item.snumber}</Text> : <Text></Text>}
+            {email ? <Text>{email}</Text> : <Text></Text>}
           </Text>
         </View>
         <View style={styles.column}>
           <Text style={styles.text}>
             {" "}
-            {item ? <Text>{item.sdepartment}</Text> : <Text></Text>}
+            {department ? <Text>{department}</Text> : <Text></Text>}
           </Text>
         </View>
         <View style={styles.column}>
           <Text style={styles.text}>
             {" "}
-            {item ? <Text>{item.ssalary}</Text> : <Text></Text>}
+            {salary ? <Text>{salary}</Text> : <Text></Text>}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
