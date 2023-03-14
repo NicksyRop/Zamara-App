@@ -9,7 +9,6 @@ import {
   StatusBar,
 } from "react-native";
 import ButtonComponent from "../Components/ButtonComponent";
-import RNSmtpMailer from "react-native-smtp-mailer";
 
 export const Create = ({ navigation }) => {
   const [name, setName] = useState();
@@ -17,6 +16,14 @@ export const Create = ({ navigation }) => {
   const [number, setNumber] = useState();
   const [department, setDepartment] = useState();
   const [salary, setSalary] = useState();
+
+  // Define the email message
+  const message = {
+    from: "your_gmail_address@gmail.com",
+    to: "recipient_email_address@example.com",
+    subject: "Test email",
+    body: "This is a test email sent from a React Native app using SMTPMailer.",
+  };
 
   const onNamechange = (value) => {
     setName(value);
@@ -33,6 +40,26 @@ export const Create = ({ navigation }) => {
   };
   const onSalarychange = (value) => {
     setSalary(value);
+  };
+
+  const sendEmail = () => {
+    var requestOptions = {
+      method: "POST",
+      redirect: "follow",
+    };
+
+    fetch(
+      "http://44.192.129.72:8080/full-stack-0.0.1-SNAPSHOT/sendmail?subject=Profile Notification %23Created&name=" +
+        name,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        if (result == "success") {
+          console.log("mail sent");
+        }
+      })
+      .catch((error) => console.log("error", error));
   };
 
   const CreateStaff = () => {
@@ -65,24 +92,7 @@ export const Create = ({ navigation }) => {
 
           navigation.navigate("List");
           //send Email
-          RNSmtpMailer.sendMail({
-            mailhost: "smtp.smtpbucket.com",
-            port: 8025,
-            ssl: false,
-            username: "your_username",
-            password: "your_password",
-            from: "nicksonkipkorir25@gmailcom",
-            recipients: "kipkorirnickson45@gmail.com",
-            subject: "Profile Notification #Created",
-            htmlBody:
-              "<h1>Greeting {name}, we are glad to inform you that your staff profile has been created</h1>",
-          })
-            .then(() => {
-              console.log("Email sent successfully");
-            })
-            .catch((error) => {
-              console.error("Error sending email:", error);
-            });
+          sendEmail();
         }
       })
       .catch((error) => console.log("error", error));

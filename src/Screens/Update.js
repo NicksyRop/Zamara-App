@@ -36,6 +36,27 @@ export const Update = () => {
 
   console.log(salary);
   console.log(number);
+  const sendEmail = () => {
+    var requestOptions = {
+      method: "POST",
+      redirect: "follow",
+    };
+
+    fetch(
+      "http://44.192.129.72:8080/full-stack-0.0.1-SNAPSHOT/sendmail?subject=Profile Notification %23Edited&name=" +
+        name,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        if (result == "success") {
+          console.log("mail sent");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const deleteUser = () => {};
 
   const UpdateStaff = () => {};
   return (
@@ -66,8 +87,9 @@ export const Update = () => {
         <Input onChangeText={(value) => onSalarychange(value)} />
       </View>
 
-      <View>
+      <View style={styles.btns}>
         <ButtonComponent text="Update" onClick={UpdateStaff} />
+        <ButtonComponent text="Delete" onClick={deleteUser} />
       </View>
     </View>
   );
@@ -82,5 +104,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     marginLeft: 15,
+  },
+  btns: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
